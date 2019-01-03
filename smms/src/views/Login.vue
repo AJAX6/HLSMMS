@@ -20,7 +20,7 @@
             <el-input type="text" v-model="ruleForm2.username" autocomplete="off" class="loginuse"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="pass">
-            <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
+            <el-input type="password" v-model="ruleForm2.userpwd" autocomplete="off"></el-input>
           </el-form-item>
 
           <el-form-item>
@@ -30,7 +30,6 @@
         </el-form>
       </div>
     </el-card>
-
   </div>
 </template>
 
@@ -40,41 +39,67 @@ export default {
   data() {
     return {
       ruleForm2: {
-        pass: "",
+        userpwd: "",
         username: ""
       },
       rules2: {
         username: [
           // require:true 必填   blur失焦事件     出错信息
-          { required: true, trigger: 'blur', message: "用户名必须填写" },
-           //min: 6 最小长度   max: 18 最大长度
-          { min:6, max:18, message: '用户名长度在 6 到 18 个字符', trigger: 'blur' }
+          { required: true, trigger: "blur", message: "用户名必须填写" },
+          //min: 6 最小长度   max: 18 最大长度
+          {
+            min: 6,
+            max: 18,
+            message: "用户名长度在 6 到 18 个字符",
+            trigger: "blur"
+          }
         ],
-        pass:[
-          { required: true, trigger: 'blur', message: "密码必须填写" },
-          { min: 6, max: 12, message: '密码长度在 6 到 12 个字符', trigger: 'blur' }
+        userpwd: [
+          { required: true, trigger: "blur", message: "密码必须填写" },
+          {
+            min: 6,
+            max: 12,
+            message: "密码长度在 6 到 12 个字符",
+            trigger: "blur"
+          }
         ]
       }
     };
   },
 
   methods: {
-    // 提交表单的方法
+    //提交表单的方法
     submitForm(formName) {
-      // 调用组件验证验证的方法
+      //调用组件的验证方法提交表单是验证
       this.$refs[formName].validate(valid => {
-        //valid参数表示验证的结果，true表示验证通过，false验证失败
         if (valid) {
-          alert("登录成功✔");
-          //使用路由对象的push实现跳转(this指向实例)
-          this.$router.push('/');
+          //让ajax携带cookie证书
+          this.axios.defaults.withCredentials = true;
+          let reqUrl = "http://127.0.0.1:9000/user/checkLogin"; //后端的api地址
+          this.axios
+            .post(reqUrl, this.qs.stringify(this.ruleForm2))
+            .then(result => {
+              if (result.data.isOk) {
+                //登录成功
+                this.$message({
+                  message:result.data.msg,
+                  type: "success"
+                });
+                this.$router.push("/"); //使用路由对象的push实现跳转
+              } else {
+                //登录失败
+                this.$message.error(result.data.msg);
+              }
+            })
+            .catch(err => {
+              this.$message.error(err.message);
+            });
         } else {
-          alert("登录失败✖");
+          alert("表单验证失败!");
           return false;
         }
       });
     },
-
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
@@ -83,21 +108,21 @@ export default {
 </script>
 
 <style>
-  #logBox{
-    background:url(../assets/bjt.jpg) no-repeat;
-    background-size:100%;
-  }
-  #Login{
-    width:450px;
-    height:280px;
-    position:absolute;
-    top:0px;
-    left: 0px;
-    right:0px;
-    bottom: 0px;
-    margin:auto;
-  }
-h1{
+#logBox {
+  background: url(../assets/bjt.jpg) no-repeat;
+  background-size: 100%;
+}
+#Login {
+  width: 450px;
+  height: 280px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  margin: auto;
+}
+h1 {
   margin: 0 auto;
   color: #fff;
   line-height: 100px;

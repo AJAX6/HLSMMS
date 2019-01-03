@@ -148,14 +148,12 @@ export default {
       this.$refs[formName].validate(valid => {
         //valid参数表示验证的结果，true表示验证通过，false验证失败
         if (valid) {
-          alert("添加成功✔");
           this.axios
             .post(
               "http://127.0.0.1:9000/user/useradd",
               this.qs.stringify(this.ruleForm2) //使用qs处理post的参数
             )
             .then(result => {
-              console.log("服务器成功返回的结果", result);
               //3）根据返回的结果处理业务逻辑
               if (result.data.isOk) {
                 //添加成功
@@ -175,7 +173,6 @@ export default {
               console.error("服务器错误返回的信息", err);
             });
         } else {
-          alert("添加失败✖");
           return false;
         }
       });

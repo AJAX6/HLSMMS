@@ -14,6 +14,10 @@ import Pwdedit from "./views/pwdedit.vue"
 import Management from "./views/management.vue"
 // 添加分类
 import Addment from "./views/addment.vue"
+// 商品添加
+import Goodsadd from "./views/GoodsAdd.vue"
+//商品管理
+import Goodslist from "./views/GoodsList.vue"
 
 
 
@@ -51,20 +55,14 @@ export default new Router({
       path: '/addment',
       component: Addment
     },
-
-    // 公共组件 菜单 左边标题和底部标题
-    /* {
-      path: '/useradd',
-      component: UserAdd
+    {
+      path: '/goodsadd',
+      component:Goodsadd
     },
     {
-      path: '/userlist',
-      component: UserList
+      path: '/goodslist',
+      component:Goodslist
     },
-    {
-      path: '/pwdedit',
-      component: UserPwdEdit
-    }, */
   ]
 
 
