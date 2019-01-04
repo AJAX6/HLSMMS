@@ -158,6 +158,7 @@ export default {
     },
     //查询按钮执行的方法
     onSearch(){
+      this.currentPage=1,
         this.getGoods();
     },
     //改变每页大小的方法
